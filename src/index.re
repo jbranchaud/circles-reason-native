@@ -22,9 +22,12 @@ let colors = [
 let width = 450;
 let height = 450;
 
-let setup = env => Env.size(~width, ~height, env);
+let setup = env => {
+  Env.size(~width, ~height, env);
+  colors;
+};
 
-let draw_circles = env => {
+let draw_circles = (colors, env) => {
   let xSpacing = width / 9;
   let ySpacing = height / 9;
 
@@ -48,9 +51,15 @@ let draw_circles = env => {
   };
 };
 
-let draw = (_state, env) => {
+let draw = (colors, env) => {
   Draw.background(Utils.color(~r=255, ~g=255, ~b=255, ~a=255), env);
-  draw_circles(env);
+  draw_circles(colors, env);
+
+  if (Env.mousePressed(env)) {
+    ListUtils.shuffle(colors);
+  } else {
+    colors;
+  };
 };
 
 run(~setup, ~draw, ());
